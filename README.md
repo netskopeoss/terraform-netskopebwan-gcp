@@ -47,14 +47,47 @@ This IaC will create the GCP resources as shown below.
 
 To deploy this template in GCP:
 
+- Make sure that the account you're connected with the BWAN web console is `System Admin`. By default, admin accounts are just "Admin", which is not sufficient. If you're not `System Admin`, please ask your admin (or your Netskope Team) to raise permissions.  
+  
 - Identify the "Base URL" for your Netskope SD-WAN Tenant. This is a URL that you use to access your Netskope tenant, for example: `https://example.infiot.net`
   This will be set in "netskope_tenant" variable blob
 
-- Get the ID of your Tenant from Netskope Team.
+- Get the ID of your Tenant from Netskope Team. Otherwise, if you've got CLI access to one of your gateways, you can get the ID using the command:
+  ```
+  docker exec -it infiot_spoke cat inf_config.json | grep -A 2 iss_tenant
+  ```
 
 - Create a REST API Token as follows:
 
 ![API Token](images/api-token.png)
+
+If you'd like to copy/paste token's permissions, please use these parameters:
+
+**Please note:** Token's expiration is set to 1 hour by default, so change it to the value you need!
+```
+[
+  {
+	"rap_resource": "",
+	"rap_privs": [
+		"privSiteCreate",
+		"privSiteRead",
+		"privSiteWrite",
+		"privSiteDelete",
+		"privSiteToken",
+		"privSiteRestart",
+		"privSiteOpsRead",
+		"privSiteOpsWrite",
+		"privTokenRead",
+		"privPolicyCreate",
+		"privPolicyRead",
+		"privPolicyWrite",
+		"privPolicyDelete",
+		"privAppRead",
+		"privAuditRecordCreate"
+	]
+  }
+]
+```
 
 *Fig 2. Netskope SD-WAN Portal API Token*
 
@@ -72,12 +105,12 @@ To deploy this template in GCP:
 - Submit the Terraform plan to preview the changes Terraform will make to match your configuration.
 
    ```sh
-   $ terraform plan
+   $ terraform plan -var-file=example.tfvars
    ```
 - Apply the plan. The apply will make no changes to your resources, you can either respond to the confirmation prompt with a 'Yes' or cancel the apply if changes are needed.
 
    ```sh
-   $ terraform apply
+   $ terraform apply -var-file=example.tfvars
    ```
 
 ## Destruction
@@ -85,7 +118,7 @@ To deploy this template in GCP:
 - To destroy this deployment, use the command:
 
    ```sh
-   $ terraform destroy
+   $ terraform destroy -var-file=example.tfvars
    ```
 
 ## Support
