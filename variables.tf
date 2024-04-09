@@ -54,7 +54,7 @@ variable "gcp_compute" {
   description = "GCP Instance Config"
   type = object({
     instance_type  = string
-    image_id       = optional(string, "projects/engineering-199721/global/images/infiot-edge")
+    image_id       = optional(string, "/projects/infiot-public-images/global/images/infiot-edge")
     primary_zone   = optional(string)
     secondary_zone = optional(string)
   })
